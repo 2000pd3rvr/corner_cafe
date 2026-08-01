@@ -86,18 +86,14 @@
       return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
     };
     const daySlots = (day) => {
-      // 0 Sun, 1 Mon, ... 6 Sat — Mon–Sat 09:00–16:00, Sunday closed
-      if (day === 0) return [];
+      // Every day Mon–Sun 09:00–17:00
+      void day;
       return [toMinutes(9, 0)];
     };
     const isOpenNow = (d) => {
-      const day = d.getDay(); // 0 Sun ... 6 Sat
       const mins = toMinutes(d.getHours(), d.getMinutes());
-      // Hours from section:
-      // Sunday closed
-      // Mon–Sat: 09:00–16:00
-      if (day === 0) return false;
-      return mins >= toMinutes(9, 0) && mins < toMinutes(16, 0);
+      // Monday–Sunday: 09:00–17:00
+      return mins >= toMinutes(9, 0) && mins < toMinutes(17, 0);
     };
 
     const nextOpenText = (d) => {
