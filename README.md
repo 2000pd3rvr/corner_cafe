@@ -7,7 +7,7 @@ emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: false
-short_description: Corner cafe — Scottish breakfast, lunch & tea at 9 Eskdail Court (v1.3)
+short_description: Scottish breakfast, lunch & tea · 9 Eskdail Court (v1.3)
 ---
 
 # Corner cafe
