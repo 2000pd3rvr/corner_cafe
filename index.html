@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta id="meta-theme-color" name="theme-color" content="#070707">
   <!-- Media via HF dataset PIANDT/sushi_atelier_artifacts (legacy folder name; cafe photography). -->
-  <link rel="icon" type="image/svg+xml" href="wordmark.svg?v=1.8">
-  <link rel="apple-touch-icon" href="wordmark.svg?v=1.8">
+  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.8">
+  <link rel="apple-touch-icon" href="logo-c.png?v=1.8">
   <script>
     (function () {
       try {
@@ -32,7 +32,8 @@
   <header class="site-header">
     <div class="container nav-wrap">
       <a class="brand" href="#home" aria-label="The Corner Cafe home">
-        <span class="brand-wordmark">The Corner Cafe</span>
+        <span class="brand-wordmark" aria-hidden="true">The Corner Cafe</span>
+        <span class="brand-sr-only">The Corner Cafe</span>
       </a>
       <nav class="nav nav-desktop" aria-label="Primary">
         <a href="#about">About</a>
@@ -91,7 +92,14 @@
       </div>
       <div class="hero-overlay"></div>
       <div class="container hero-content">
-        <h1 class="hero-wordmark">The Corner Cafe</h1>
+        <img
+          class="hero-logo"
+          src="logo-c.svg?v=1.8"
+          alt="Corner cafe"
+          width="256"
+          height="256"
+          fetchpriority="high"
+          decoding="async">
         <div class="hero-actions">
           <a class="btn" href="#hours">Find us</a>
           <a class="btn btn-outline" href="#menu">View menu</a>
@@ -500,7 +508,7 @@
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
-        <p class="footer-copy">&copy; <span id="year"></span> The Corner Cafe</p>
+        <p class="footer-copy">&copy; <span id="year"></span> Corner cafe</p>
       </div>
     </div>
   </footer>
