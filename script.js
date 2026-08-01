@@ -139,9 +139,9 @@
   const hoursQuote = document.querySelector("[data-hours-quote]");
   if (hoursQuote) {
     const quotes = [
-      "“Simple and to the point, this no-frills favourite in Fitzrovia has a modern take on sushi.”",
-      "“Small but lovely … Sushi fans congregate at the brightly lit counter.”",
-      "“Great value sushi where you least expect it.”",
+      "“A cracking wee cafe—proper Scottish breakfast and tea that tastes like home.”",
+      "“Cullen skink, warm scones and a pot of tea—exactly what you want at Eskdail Court.”",
+      "“Haggis, neeps and tatties done right; the cream tea is not to be missed.”",
     ];
     let quoteIndex = 0;
     let cycleTimer = 0;
@@ -377,14 +377,14 @@
         "Corner cafe Moment",
         "Chef's Detail",
         "Counter Light",
-        "Omakase Mood",
-        "Evening Plate",
-        "Sushi Study",
+        "Breakfast Mood",
+        "Afternoon Plate",
+        "Tea Study",
       ];
 
       const makeMeta = (imgSrc, idx) => {
         const title = `${captionWords[idx % captionWords.length]}`;
-        const desc = "Curated sushi frame from the Corner cafe gallery.";
+        const desc = "Curated cafe frame from the Corner cafe gallery.";
         return { title, desc };
       };
 

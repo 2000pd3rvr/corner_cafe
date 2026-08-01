@@ -1703,12 +1703,12 @@ html[data-theme="light"] .gallery-spotlight__dot.is-active {
   background: linear-gradient(90deg, rgba(212, 163, 79, 0.28) 0%, transparent 100%);
 }
 
-.tab-panel[data-panel="drinks"] .menu-heading::before {
+.tab-panel[data-panel="tea"] .menu-heading::before {
   background: linear-gradient(180deg, #8e3aa8 0%, #5b2f8f 100%);
   box-shadow: 0 0 0 2px rgba(142, 58, 168, 0.2);
 }
 
-.tab-panel[data-panel="drinks"] .menu-heading::after {
+.tab-panel[data-panel="tea"] .menu-heading::after {
   background: linear-gradient(90deg, rgba(142, 58, 168, 0.28) 0%, transparent 100%);
 }
 
