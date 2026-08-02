@@ -2307,6 +2307,149 @@ html[data-theme="light"] .map-nearby-note {
   font-weight: 500;
 }
 
+.hours-service-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.hours-service-note a {
+  color: #d4a34f;
+  text-underline-offset: 2px;
+}
+
+.menu-legal-notes {
+  margin: 1.25rem 0 0;
+  padding: 0.85rem 0 0;
+  border-top: 1px solid var(--menu-row-border);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.menu-legal-notes strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.menu-legal-notes__sep {
+  margin: 0 0.45rem;
+  opacity: 0.55;
+}
+
+.menu-legal-notes a {
+  color: #d4a34f;
+  text-underline-offset: 2px;
+}
+
+.policies-section {
+  padding-top: 2.5rem;
+  padding-bottom: 2.75rem;
+}
+
+.policies-wrap {
+  max-width: 46rem;
+}
+
+.policies-title {
+  margin: 0.2rem 0 0.65rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.15rem);
+  font-weight: 600;
+}
+
+.policies-lead {
+  margin: 0 0 1.35rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.policies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.policy-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 0;
+}
+
+.policy-card summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.75rem;
+  padding: 0.9rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.policy-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.policy-card summary::before {
+  content: "›";
+  color: #d4a34f;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.policy-card[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.policy-draft-tag {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1c1b19;
+  background: #ffd700;
+  padding: 0.22rem 0.45rem;
+}
+
+html[data-theme="light"] .policy-draft-tag {
+  background: #ffe566;
+}
+
+.policy-body {
+  padding: 0 1rem 1rem 1.85rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+
+.policy-body p {
+  margin: 0 0 0.7rem;
+}
+
+.policy-body p:last-child {
+  margin-bottom: 0;
+}
+
+.policy-body a {
+  color: #d4a34f;
+}
+
+.policies-accept-note {
+  margin: 1.35rem 0 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
 .contact-section {
   align-items: start;
 }

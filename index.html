@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta id="meta-theme-color" name="theme-color" content="#070707">
   <!-- Media via HF dataset PIANDT/sushi_atelier_artifacts (legacy folder name; cafe photography). -->
-  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.9">
-  <link rel="apple-touch-icon" href="logo-c.png?v=1.9">
+  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.10">
+  <link rel="apple-touch-icon" href="logo-c.png?v=1.10">
   <script>
     (function () {
       try {
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1.9">
+  <link rel="stylesheet" href="styles.css?v=1.10">
 </head>
 <body>
   <header class="site-header">
@@ -40,6 +40,7 @@
         <a href="#spotlight">Spotlight</a>
         <a href="#menu">Menu</a>
         <a href="#hours">Contact</a>
+        <a href="#policies">Policies</a>
         <span class="open-now-chip is-closed" data-open-now>Closed</span>
       </nav>
       <div class="nav-actions">
@@ -61,6 +62,7 @@
       <a href="#spotlight">Spotlight</a>
       <a href="#menu">Menu</a>
       <a href="#hours">Contact</a>
+      <a href="#policies">Policies</a>
       <span class="open-now-chip is-closed" data-open-now>Closed</span>
       <a href="#menu">See the menu</a>
     </nav>
@@ -95,7 +97,7 @@
       <div class="container hero-content">
         <img
           class="hero-logo"
-          src="logo-c.svg?v=1.9"
+          src="logo-c.svg?v=1.10"
           alt="Corner cafe"
           width="256"
           height="256"
@@ -414,7 +416,14 @@
               </section>
             </div>
           </div>
-                </div>
+        </div>
+
+        <p class="menu-legal-notes" role="note">
+          <strong>Allergens:</strong> dishes may contain or come into contact with the 14 major UK allergens—please tell us before ordering.
+          <span class="menu-legal-notes__sep" aria-hidden="true">·</span>
+          <strong>Prices:</strong> menu prices include VAT where applicable.
+          <a href="#policies">Full policies</a>
+        </p>
 
       </div>
     </section>
@@ -452,6 +461,11 @@
           </p>
           <p class="address-block">9 Eskdail Court, Dalkeith EH22</p>
           <p class="hours-delivery-note">Delivery via <em>Just Eat</em> — coming soon.</p>
+          <p class="hours-service-note">
+            <strong>Pickup</strong> at the counter · <strong>Delivery</strong> when Just Eat launches.
+            Online order cut-off <strong>30 minutes before close</strong> (16:30).
+            <a href="#policies-fulfilment">Details</a>
+          </p>
         </article>
         <article id="booking" class="booking-hours__col booking-hours__booking" aria-label="Booking">
           <div class="booking-contact-wrap">
@@ -497,15 +511,150 @@
       </div>
     </section>
 
+    <section id="policies" class="section policies-section" aria-labelledby="policies-title">
+      <div class="container policies-wrap">
+        <p class="eyebrow">Legal &amp; operations</p>
+        <h2 id="policies-title" class="policies-title">Policies</h2>
+        <p class="policies-lead">
+          Draft notices for UK café operations and a future online order flow. Marked
+          <em>Draft for review</em> until you accept the wording (solicitor / accountant check recommended).
+        </p>
+
+        <div class="policies-list">
+          <details class="policy-card" id="policies-ops" open>
+            <summary>1. Legal &amp; operations <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                The Corner Cafe trades from <strong>9 Eskdail Court, Dalkeith, Midlothian</strong>.
+                These website notices describe how we handle allergens, pricing, privacy, fulfilment,
+                refunds, and (when enabled) online payments. They do not replace food-hygiene, employment,
+                or trading-standards obligations, and are not legal advice.
+              </p>
+              <p>
+                Contact: <a href="mailto:hello@cornercafe.scot">hello@cornercafe.scot</a>
+                · <a href="tel:+441315639459">+44 131 563 9459</a>.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-allergens">
+            <summary>2. Allergens <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                Our kitchen handles the 14 major allergens recognised in the UK (including cereals containing
+                gluten, crustaceans, eggs, fish, peanuts, soybeans, milk, nuts, celery, mustard, sesame,
+                sulphites, lupin and molluscs). Cross-contact may occur.
+              </p>
+              <p>
+                Please tell a member of staff about allergies or intolerances <strong>before you order</strong>.
+                Written allergen information is available on request. Online ordering (when live) will ask you
+                to confirm allergen notes before payment.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-vat">
+            <summary>3. Prices &amp; VAT <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                Prices on this menu are in pounds sterling (£) and <strong>include VAT where VAT applies</strong>
+                to the item or service. If our VAT registration status or rates change, we will update displayed
+                prices. Tips and discretionary service charges (if any) will be shown separately at checkout.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-privacy">
+            <summary>4. Privacy (name, phone, email) <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                If you enquire or place an order, we may process your <strong>name, phone number and email</strong>
+                to confirm the order, arrange pickup/delivery, send status updates, and respond to messages.
+                We keep this information only as long as needed for the order and any legal record-keeping,
+                then delete or anonymise it.
+              </p>
+              <p>
+                We do not sell your details. Payment providers (when used) process payment data under their own
+                notices. To access, correct or delete your data, email
+                <a href="mailto:hello@cornercafe.scot">hello@cornercafe.scot</a>.
+                You may also complain to the ICO if you believe your data rights have been breached.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-fulfilment">
+            <summary>5–6. Pickup, delivery &amp; cut-off times <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p><strong>Pickup:</strong> collect in café at 9 Eskdail Court during opening hours (Mon–Sun 9:00–17:00).</p>
+              <p>
+                <strong>Delivery:</strong> not available from this website yet. Delivery is planned via
+                <em>Just Eat</em> (“coming soon”). Platform terms will apply for those orders.
+              </p>
+              <p>
+                <strong>Cut-off (draft for online ordering):</strong> last online order for same-day pickup
+                <strong>30 minutes before close</strong> (16:30). Breakfast items may stop earlier when sold out
+                or after the breakfast service window (currently until 11:30). We may refuse or retime orders
+                when the kitchen is at capacity.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-refunds">
+            <summary>7. Refunds &amp; failed transfers <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                <strong>Bank transfer / pay-by-bank (when offered):</strong> each order will show a unique payment
+                reference. Please pay the exact amount with that reference. Orders stay
+                <em>awaiting payment</em> until funds clear. If you pay the wrong amount or omit the reference,
+                email us with proof of payment so we can match it—this can delay preparation.
+              </p>
+              <p>
+                <strong>Failed or duplicate transfers:</strong> contact us promptly. Confirmed duplicates or clear
+                failures will be refunded to the originating account once verified (timing depends on your bank).
+                Perishable food already prepared to your instruction after payment confirmation is generally
+                non-refundable, except where required by law or where we cancel.
+              </p>
+            </div>
+          </details>
+
+          <details class="policy-card" id="policies-sca">
+            <summary>8. Strong Customer Authentication / PSD2 <span class="policy-draft-tag">Draft for review</span></summary>
+            <div class="policy-body">
+              <p>
+                Card or open-banking checkout is <strong>not live on this site yet</strong>. When we enable a
+                regulated payment provider, that provider will handle Strong Customer Authentication (SCA) and
+                PSD2 obligations (for example bank login, one-time passcode, or app approval).
+              </p>
+              <p>
+                We will not store full card numbers on café systems. Chargebacks, authentication failures and
+                settlement follow the provider’s terms, which we will link here before go-live.
+              </p>
+            </div>
+          </details>
+        </div>
+
+        <p class="policies-accept-note">
+          Status: <strong>drafts published for your review</strong>. Reply or edit copy to accept; until then treat
+          as provisional website wording only.
+        </p>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
-        <p class="footer-copy">&copy; <span id="year"></span> Corner cafe</p>
+        <p class="footer-copy">&copy; <span id="year"></span> The Corner Cafe</p>
+        <p class="footer-fine">
+          <a href="#policies">Policies</a>
+          · <a href="#policies-allergens">Allergens</a>
+          · <a href="#policies-privacy">Privacy</a>
+          · <a href="#policies-refunds">Refunds</a>
+        </p>
       </div>
     </div>
   </footer>
-  <script src="script.js?v=1.9" defer></script>
+  <script src="script.js?v=1.10" defer></script>
 </body>
 </html>
