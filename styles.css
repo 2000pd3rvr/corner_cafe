@@ -2191,6 +2191,27 @@ html[data-theme="light"] #spotlight .spotlight-menu-tabs .menu-col {
   align-items: start;
 }
 
+.map-with-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.map-nearby-note {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  color: var(--muted);
+}
+
+html[data-theme="light"] .map-nearby-note {
+  color: var(--muted);
+}
+
 .map-note {
   margin: 0.55rem 0 0.35rem;
   padding: 0;
