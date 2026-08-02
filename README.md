@@ -6,7 +6,7 @@ sdk_version: "1.6"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
-pinned: false
+pinned: true
 short_description: Contact +44 7308 482104 · Scottish cafe (v1.6)
 ---
 
