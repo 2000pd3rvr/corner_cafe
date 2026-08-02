@@ -627,12 +627,25 @@
     if (kind) contactStatus.classList.add(kind);
   };
 
+  const setContactFieldsActive = (active) => {
+    if (!contactForm) return;
+    contactForm.querySelectorAll("input, textarea, button").forEach((el) => {
+      if (el.name === "website") {
+        el.tabIndex = -1;
+        return;
+      }
+      el.disabled = !active;
+    });
+  };
+
   const openContact = (prefill) => {
     if (!contactModal) return;
     contactLastFocus = document.activeElement;
     contactModal.hidden = false;
+    contactModal.removeAttribute("inert");
     document.body.style.overflow = "hidden";
     setContactStatus("", null);
+    setContactFieldsActive(true);
     if (contactForm && prefill) {
       if (prefill.subject) contactForm.elements.subject.value = prefill.subject;
       if (prefill.message) contactForm.elements.message.value = prefill.message;
@@ -646,11 +659,20 @@
   const closeContact = () => {
     if (!contactModal) return;
     contactModal.hidden = true;
+    contactModal.setAttribute("inert", "");
     document.body.style.overflow = "";
+    setContactFieldsActive(false);
     if (contactLastFocus && typeof contactLastFocus.focus === "function") {
       contactLastFocus.focus();
     }
   };
+
+  /* Start closed: form must not show or accept input until Contact us */
+  if (contactModal) {
+    contactModal.hidden = true;
+    contactModal.setAttribute("inert", "");
+    setContactFieldsActive(false);
+  }
 
   document.addEventListener("click", (e) => {
     const openEl = e.target.closest("[data-contact-open]");

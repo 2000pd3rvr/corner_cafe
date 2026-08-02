@@ -2,17 +2,17 @@
 title: Corner cafe
 sdk: static
 app_file: index.html
-sdk_version: "1.12"
+sdk_version: "1.13"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: true
-short_description: Contact us button opens message form · v1.12
+short_description: Send message only after Contact us · v1.13
 ---
 
 # Corner cafe
 
-**v1.12** — Contact message form opens only via **Contact us** under the contact section; removed “we reply… on your device” lead. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+**v1.13** — “Send a message” stays fully hidden until **Contact us** is clicked, then fields activate for typing. Fix: CSS `display:flex` no longer overrides `[hidden]`. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
 
 ## Mail
 

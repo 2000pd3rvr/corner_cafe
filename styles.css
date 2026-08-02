@@ -3046,7 +3046,7 @@ blockquote {
   }
 }
 
-/* Floating contact form */
+/* Floating contact form — only visible after Contact us (hidden must beat display:flex) */
 .contact-modal {
   position: fixed;
   inset: 0;
@@ -3056,6 +3056,11 @@ blockquote {
   justify-content: flex-end;
   padding: 1rem;
   pointer-events: none;
+}
+
+.contact-modal[hidden] {
+  display: none !important;
+  pointer-events: none !important;
 }
 
 .contact-modal:not([hidden]) {
