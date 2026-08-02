@@ -1,20 +1,43 @@
-"""Serve the static site; media under /sushi_atelier_artifacts/ from disk or HF Dataset via proxy."""
+"""Serve the static site; media under /sushi_atelier_artifacts/ from disk or HF Dataset via proxy.
+
+Outgoing enquiry mail: POST /api/contact → SMTP → MAIL_TO (default pd3rvr@icloud.com).
+Configure Space / process secrets: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, MAIL_TO,
+optional SMTP_FROM. iCloud: SMTP_HOST=smtp.mail.me.com SMTP_PORT=587 + app-specific password.
+"""
 
 from __future__ import annotations
 
 import logging
 import os
+import re
+import time
+from collections import defaultdict
 from contextlib import asynccontextmanager
+from email.message import EmailMessage
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
+import aiosmtplib
 import httpx
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, Response, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field, field_validator
 
 BASE = Path(__file__).resolve().parent
 ARTIFACTS_DIR = BASE / "sushi_atelier_artifacts"
+
+MAIL_TO = os.environ.get("MAIL_TO", "pd3rvr@icloud.com").strip()
+SMTP_HOST = os.environ.get("SMTP_HOST", "smtp.mail.me.com").strip()
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USER = os.environ.get("SMTP_USER", "").strip()
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "").strip()
+SMTP_FROM = os.environ.get("SMTP_FROM", "").strip() or SMTP_USER or MAIL_TO
+
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+_CONTACT_HITS: dict[str, list[float]] = defaultdict(list)
+_CONTACT_WINDOW_S = 600.0
+_CONTACT_MAX = 8
 
 # Dataset id on the Hub (no leading slash).
 HF_DATASET = os.environ.get("SUSHI_ARTIFACTS_DATASET", "PIANDT/sushi_atelier_artifacts")
@@ -163,6 +186,102 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+class ContactIn(BaseModel):
+    email: str = Field(min_length=3, max_length=254)
+    subject: str = Field(min_length=1, max_length=200)
+    message: str = Field(min_length=1, max_length=5000)
+    website: str = ""  # honeypot — leave empty
+
+    @field_validator("email")
+    @classmethod
+    def _email_ok(cls, v: str) -> str:
+        email = (v or "").strip()
+        if not _EMAIL_RE.match(email):
+            raise ValueError("Invalid email address")
+        return email
+
+    @field_validator("subject", "message")
+    @classmethod
+    def _trim(cls, v: str) -> str:
+        return (v or "").strip()
+
+
+def _client_ip(request: Request) -> str:
+    forwarded = request.headers.get("x-forwarded-for") or ""
+    if forwarded:
+        return forwarded.split(",")[0].strip() or "unknown"
+    if request.client:
+        return request.client.host or "unknown"
+    return "unknown"
+
+
+def _rate_limited(ip: str) -> bool:
+    now = time.monotonic()
+    bucket = [t for t in _CONTACT_HITS[ip] if now - t < _CONTACT_WINDOW_S]
+    _CONTACT_HITS[ip] = bucket
+    if len(bucket) >= _CONTACT_MAX:
+        return True
+    bucket.append(now)
+    _CONTACT_HITS[ip] = bucket
+    return False
+
+
+@app.get("/api/health")
+async def api_health() -> dict[str, str | bool]:
+    return {
+        "ok": True,
+        "mail_configured": bool(SMTP_USER and SMTP_PASSWORD),
+        "mail_to": MAIL_TO,
+    }
+
+
+@app.post("/api/contact")
+async def api_contact(payload: ContactIn, request: Request) -> JSONResponse:
+    """Accept enquiry form fields and send via SMTP (no device mail client)."""
+    if payload.website:
+        # Silent success for bots that fill the honeypot.
+        return JSONResponse({"ok": True})
+
+    if _rate_limited(_client_ip(request)):
+        raise HTTPException(status_code=429, detail="Too many messages. Please try again later.")
+
+    if not SMTP_USER or not SMTP_PASSWORD:
+        raise HTTPException(
+            status_code=503,
+            detail="Mail server is not configured (set SMTP_USER and SMTP_PASSWORD secrets).",
+        )
+
+    msg = EmailMessage()
+    msg["Subject"] = f"[Corner cafe] {payload.subject}"
+    msg["From"] = SMTP_FROM
+    msg["To"] = MAIL_TO
+    msg["Reply-To"] = payload.email
+    msg.set_content(
+        "Corner cafe website enquiry\n"
+        f"From: {payload.email}\n"
+        f"Subject: {payload.subject}\n\n"
+        f"{payload.message}\n"
+    )
+
+    try:
+        await aiosmtplib.send(
+            msg,
+            hostname=SMTP_HOST,
+            port=SMTP_PORT,
+            username=SMTP_USER,
+            password=SMTP_PASSWORD,
+            start_tls=True,
+        )
+    except aiosmtplib.errors.SMTPException as exc:
+        logger.exception("SMTP send failed")
+        raise HTTPException(status_code=502, detail=f"Mail server error: {exc}") from exc
+    except OSError as exc:
+        logger.exception("SMTP connection failed")
+        raise HTTPException(status_code=502, detail=f"Mail server unreachable: {exc}") from exc
+
+    return JSONResponse({"ok": True})
 
 
 def _safe_artifact_path(rel: str) -> Path | None:

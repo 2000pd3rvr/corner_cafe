@@ -612,4 +612,111 @@
   } else if (pressSection) {
     pressSection.classList.add("press-section--visible");
   }
+
+  /* Floating contact form → POST /api/contact (SMTP mail server) */
+  const contactModal = document.querySelector("[data-contact-modal]");
+  const contactForm = document.querySelector("[data-contact-form]");
+  const contactStatus = document.querySelector("[data-contact-status]");
+  const contactSubmit = document.querySelector("[data-contact-submit]");
+  let contactLastFocus = null;
+
+  const setContactStatus = (text, kind) => {
+    if (!contactStatus) return;
+    contactStatus.textContent = text || "";
+    contactStatus.classList.remove("is-error", "is-ok");
+    if (kind) contactStatus.classList.add(kind);
+  };
+
+  const openContact = (prefill) => {
+    if (!contactModal) return;
+    contactLastFocus = document.activeElement;
+    contactModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    setContactStatus("", null);
+    if (contactForm && prefill) {
+      if (prefill.subject) contactForm.elements.subject.value = prefill.subject;
+      if (prefill.message) contactForm.elements.message.value = prefill.message;
+    }
+    const first = contactForm && contactForm.querySelector('input[name="email"]');
+    window.setTimeout(() => {
+      if (first) first.focus();
+    }, 30);
+  };
+
+  const closeContact = () => {
+    if (!contactModal) return;
+    contactModal.hidden = true;
+    document.body.style.overflow = "";
+    if (contactLastFocus && typeof contactLastFocus.focus === "function") {
+      contactLastFocus.focus();
+    }
+  };
+
+  document.addEventListener("click", (e) => {
+    const openEl = e.target.closest("[data-contact-open]");
+    if (openEl) {
+      e.preventDefault();
+      openContact();
+      return;
+    }
+    if (e.target.closest("[data-contact-close]")) {
+      e.preventDefault();
+      closeContact();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && contactModal && !contactModal.hidden) {
+      closeContact();
+    }
+  });
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fd = new FormData(contactForm);
+      const body = {
+        email: String(fd.get("email") || "").trim(),
+        subject: String(fd.get("subject") || "").trim(),
+        message: String(fd.get("message") || "").trim(),
+        website: String(fd.get("website") || ""),
+      };
+      if (!body.email || !body.subject || !body.message) {
+        setContactStatus("Please fill in email, subject and message.", "is-error");
+        return;
+      }
+      if (contactSubmit) contactSubmit.disabled = true;
+      setContactStatus("Sending…", null);
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(body),
+        });
+        let detail = "";
+        try {
+          const data = await res.json();
+          detail = data.detail || data.message || "";
+          if (Array.isArray(detail)) {
+            detail = detail.map((d) => d.msg || JSON.stringify(d)).join(" ");
+          }
+        } catch (_) {}
+        if (!res.ok) {
+          setContactStatus(detail || `Could not send (${res.status}).`, "is-error");
+          return;
+        }
+        setContactStatus("Sent — thank you. We’ll reply by email.", "is-ok");
+        contactForm.reset();
+        window.setTimeout(() => closeContact(), 1400);
+      } catch (_) {
+        setContactStatus("Network error — please try again.", "is-error");
+      } finally {
+        if (contactSubmit) contactSubmit.disabled = false;
+      }
+    });
+  }
+
+  if (window.location.hash === "#contact") {
+    openContact();
+  }
 })();
