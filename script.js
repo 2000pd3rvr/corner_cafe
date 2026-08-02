@@ -688,21 +688,57 @@
       if (contactSubmit) contactSubmit.disabled = true;
       setContactStatus("Sending…", null);
       try {
-        const res = await fetch("/api/contact", {
+        // Prefer on-server SMTP API when the Space/host runs app.py (Docker / local).
+        let usedApi = false;
+        try {
+          const health = await fetch("/api/health", { headers: { Accept: "application/json" } });
+          if (health.ok) {
+            const res = await fetch("/api/contact", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify(body),
+            });
+            usedApi = true;
+            let detail = "";
+            try {
+              const data = await res.json();
+              detail = data.detail || data.message || "";
+              if (Array.isArray(detail)) {
+                detail = detail.map((d) => d.msg || JSON.stringify(d)).join(" ");
+              }
+            } catch (_) {}
+            if (!res.ok) {
+              setContactStatus(detail || `Could not send (${res.status}).`, "is-error");
+              return;
+            }
+            setContactStatus("Sent — thank you. We’ll reply by email.", "is-ok");
+            contactForm.reset();
+            window.setTimeout(() => closeContact(), 1400);
+            return;
+          }
+        } catch (_) {
+          /* fall through to FormSubmit when API is not hosted (static HF Space) */
+        }
+
+        // Static hosting fallback: FormSubmit AJAX → pd3rvr@icloud.com (no local mail app).
+        const fsRes = await fetch("https://formsubmit.co/ajax/pd3rvr@icloud.com", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify({
+            email: body.email,
+            subject: body.subject,
+            message: body.message,
+            _subject: `[Corner cafe] ${body.subject}`,
+            _template: "table",
+            _captcha: "false",
+          }),
         });
-        let detail = "";
-        try {
-          const data = await res.json();
-          detail = data.detail || data.message || "";
-          if (Array.isArray(detail)) {
-            detail = detail.map((d) => d.msg || JSON.stringify(d)).join(" ");
-          }
-        } catch (_) {}
-        if (!res.ok) {
-          setContactStatus(detail || `Could not send (${res.status}).`, "is-error");
+        const fsData = await fsRes.json().catch(() => ({}));
+        if (!fsRes.ok || fsData.success === "false" || fsData.success === false) {
+          setContactStatus(
+            (fsData && (fsData.message || fsData.error)) || "Could not send. Please try again.",
+            "is-error"
+          );
           return;
         }
         setContactStatus("Sent — thank you. We’ll reply by email.", "is-ok");
