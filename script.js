@@ -751,8 +751,4 @@
       }
     });
   }
-
-  if (window.location.hash === "#contact") {
-    openContact();
-  }
 })();

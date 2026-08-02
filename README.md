@@ -2,17 +2,17 @@
 title: Corner cafe
 sdk: static
 app_file: index.html
-sdk_version: "1.11"
+sdk_version: "1.12"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: true
-short_description: Enquire form emails inbox (no mail app) · v1.11
+short_description: Contact us button opens message form · v1.12
 ---
 
 # Corner cafe
 
-**v1.11** — Floating enquire form (email, subject, message) sends to **pd3rvr@icloud.com** without opening a device mail app. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+**v1.12** — Contact message form opens only via **Contact us** under the contact section; removed “we reply… on your device” lead. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
 
 ## Mail
 
