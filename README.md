@@ -1,41 +1,22 @@
 ---
 title: Corner cafe
+sdk: static
+app_file: index.html
+sdk_version: "1.11"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
-sdk: static
-app_file: index.html
 pinned: true
-short_description: Scottish café + contact mail form (v1.11)
+short_description: Enquire form emails inbox (no mail app) · v1.11
 ---
 
 # Corner cafe
 
-**v1.11** — Floating contact form (email, subject, message). Messages go to **pd3rvr@icloud.com** without opening a device mail app. Location: **9 Eskdail Court**, Dalkeith.
+**v1.11** — Floating enquire form (email, subject, message) sends to **pd3rvr@icloud.com** without opening a device mail app. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
 
-## Outgoing mail
+## Mail
 
-1. **Preferred (local Docker / any host running `app.py`)** — `POST /api/contact` sends via SMTP.
-2. **Hugging Face static Space** — free-tier Docker CPU quota is currently `0`, so the Space stays **static**. The form uses FormSubmit AJAX to deliver mail when `/api/contact` is unavailable.
+- **Static HF Space:** form posts via FormSubmit AJAX to `pd3rvr@icloud.com` (same pattern as careTalk). First live send may need a one-time FormSubmit confirmation in that inbox.
+- **Docker / `app.py` outgoing mail:** `POST /api/contact` sends over SMTP. Set secrets `SMTP_USER` + `SMTP_PASSWORD` (iCloud app-specific password), optional `SMTP_HOST=smtp.mail.me.com`, `SMTP_PORT=587`, `MAIL_TO`, `SMTP_FROM`.
 
-### SMTP secrets (local Docker or future Docker Space)
-
-| Variable | Example |
-|----------|---------|
-| `SMTP_HOST` | `smtp.mail.me.com` |
-| `SMTP_PORT` | `587` |
-| `SMTP_USER` | `pd3rvr@icloud.com` |
-| `SMTP_PASSWORD` | iCloud **app-specific** password |
-| `MAIL_TO` | `pd3rvr@icloud.com` |
-| `SMTP_FROM` | optional (defaults to `SMTP_USER`) |
-
-```bash
-docker build -t corner-cafe .
-docker run --rm -p 7860:7860 \
-  -e SMTP_USER=pd3rvr@icloud.com \
-  -e SMTP_PASSWORD='your-app-specific-password' \
-  -e MAIL_TO=pd3rvr@icloud.com \
-  corner-cafe
-```
-
-Media loads from `PIANDT/sushi_atelier_artifacts`.
+> Hugging Face free tier no longer allows new Docker Spaces, so this Space uses the **static** SDK. `Dockerfile` / `app.py` remain for local Docker runs with the SMTP mail server.
