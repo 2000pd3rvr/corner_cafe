@@ -166,7 +166,8 @@
     }
   }
 
-  /* Metered or slow connections keep the opening clip and skip the video rotation entirely. */
+  /* Metered / slow connections still affect spotlight density; the hero always cycles
+     the full set and only downloads one clip ahead. */
   const connection =
     navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
   const lightMediaMode = !!(
@@ -234,8 +235,52 @@
   const heroSlides = heroRoot ? Array.from(heroRoot.querySelectorAll(".hero-slide")) : [];
   if (heroRoot && heroSlides.length > 0) {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const isMobileHero = () =>
+      window.matchMedia("(max-width: 767px)").matches ||
+      window.matchMedia("(pointer: coarse)").matches;
     let cur = heroSlides.findIndex((el) => el.classList.contains("is-active"));
     if (cur < 0) cur = 0;
+    let heroTimer = 0;
+    let heroEndedHandler = null;
+
+    const clearHeroAdvance = () => {
+      window.clearTimeout(heroTimer);
+      heroTimer = 0;
+      if (heroEndedHandler) {
+        heroSlides.forEach((el) => {
+          if (el.tagName === "VIDEO") el.removeEventListener("ended", heroEndedHandler);
+        });
+        heroEndedHandler = null;
+      }
+    };
+
+    const warmNext = () => {
+      if (heroSlides.length < 2) return;
+      const next = heroSlides[(cur + 1) % heroSlides.length];
+      whenIdle(() => attachVideoSource(next));
+    };
+
+    const goHero = (index) => {
+      cur = ((index % heroSlides.length) + heroSlides.length) % heroSlides.length;
+      syncHeroMedia();
+    };
+
+    const scheduleAdvance = (vid) => {
+      clearHeroAdvance();
+      if (reduceMotion || heroSlides.length < 2) return;
+
+      heroEndedHandler = () => {
+        goHero(cur + 1);
+      };
+      vid.addEventListener("ended", heroEndedHandler);
+
+      // Cap dwell so a long clip (or a stalled load) cannot freeze the rotation.
+      // Mobile gets a slightly longer max so radios can finish the next fetch.
+      const maxMs = isMobileHero() ? 10000 : 8000;
+      heroTimer = window.setTimeout(() => {
+        goHero(cur + 1);
+      }, maxMs);
+    };
 
     const syncHeroMedia = () => {
       heroSlides.forEach((el, i) => {
@@ -245,6 +290,7 @@
         const vid = /** @type {HTMLVideoElement} */ (el);
         vid.muted = true;
         vid.playsInline = true;
+        vid.loop = false;
         vid.defaultPlaybackRate = 1;
         vid.playbackRate = 1;
         if (active) {
@@ -252,6 +298,8 @@
           const playActive = () => {
             const p = vid.play();
             if (p && typeof p.catch === "function") p.catch(() => {});
+            scheduleAdvance(vid);
+            warmNext();
           };
           if (vid.readyState >= 1) {
             try {
@@ -277,26 +325,25 @@
       });
     };
 
+    // Always rotate the full set — including on Save-Data / 2G–3G. Lazy attach keeps
+    // the phone downloading one clip at a time; only reduced-motion freezes on the first.
     syncHeroMedia();
-
-    if (!reduceMotion && !lightMediaMode && heroSlides.length > 1) {
-      const ms = 8000;
-      const tick = () => {
-        cur = (cur + 1) % heroSlides.length;
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        clearHeroAdvance();
+        const active = heroSlides[cur];
+        if (active && active.tagName === "VIDEO") active.pause();
+      } else {
         syncHeroMedia();
-        // Warm the following clip during playback so the crossfade never waits on the network.
-        whenIdle(() => attachVideoSource(heroSlides[(cur + 1) % heroSlides.length]));
-      };
-      const timer = window.setInterval(tick, ms);
-      window.addEventListener(
-        "pagehide",
-        () => {
-          window.clearInterval(timer);
-        },
-        { once: true }
-      );
-      whenIdle(() => attachVideoSource(heroSlides[1]));
-    }
+      }
+    });
+    window.addEventListener(
+      "pagehide",
+      () => {
+        clearHeroAdvance();
+      },
+      { once: true }
+    );
   }
 
   const spotlightRoot = document.querySelector("[data-spotlight-carousel]");
