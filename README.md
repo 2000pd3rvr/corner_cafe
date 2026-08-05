@@ -2,17 +2,17 @@
 title: Corner cafe
 sdk: static
 app_file: index.html
-sdk_version: "1.15"
+sdk_version: "1.16"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: true
-short_description: Faster menu gallery on mobile/tablet (v1.15)
+short_description: Fix hero logo attributes showing as text (v1.16)
 ---
 
 # Corner cafe
 
-**v1.15** — First home-background clip removed; menu-side spotlight gallery loads faster on phones and tablets. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+**v1.16** — Fix: the hero logo `<img>` closed early after `src`, so `alt` / `width` / `fetchpriority` / `decoding` rendered as plain text on the page. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
 
 ### v1.15 notes
 
