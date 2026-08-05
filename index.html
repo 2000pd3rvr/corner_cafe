@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta id="meta-theme-color" name="theme-color" content="#070707">
   <!-- Media via HF dataset PIANDT/sushi_atelier_artifacts (legacy folder name; cafe photography). -->
-  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.13">
-  <link rel="apple-touch-icon" href="logo-c.png?v=1.13">
+  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.14">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1.14">
   <script>
     (function () {
       try {
@@ -25,8 +25,18 @@
   <meta name="description" content="Scottish and British cafe fare at 9 Eskdail Court, Dalkeith: full breakfast, hearty lunch, afternoon tea. Haggis, Cullen skink, pies, scones and proper tea.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=1.13">
+  <link rel="preconnect" href="https://images.pexels.com" crossorigin>
+  <link rel="dns-prefetch" href="https://huggingface.co">
+  <link rel="stylesheet" href="styles.css?v=1.14">
+  <!-- Fonts load without blocking first paint; system stack renders immediately. -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap"
+    media="print"
+    onload="this.media='all';this.onload=null">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap">
+  </noscript>
 </head>
 <body>
   <header class="site-header">
@@ -40,7 +50,6 @@
         <a href="#spotlight">Spotlight</a>
         <a href="#menu">Menu</a>
         <a href="#hours">Contact</a>
-        <a href="#policies">Policies</a>
         <span class="open-now-chip is-closed" data-open-now>Closed</span>
       </nav>
       <div class="nav-actions">
@@ -62,7 +71,6 @@
       <a href="#spotlight">Spotlight</a>
       <a href="#menu">Menu</a>
       <a href="#hours">Contact</a>
-      <a href="#policies">Policies</a>
       <span class="open-now-chip is-closed" data-open-now>Closed</span>
       <a href="#menu">See the menu</a>
     </nav>
@@ -70,34 +78,32 @@
 
   <main id="home">
     <section class="hero">
+      <!--
+        Only the first clip ships a real src. The rest carry data-src and are attached by
+        script.js when they are about to play, so a phone downloads one video instead of seven.
+      -->
       <div class="hero-media" data-hero-slideshow aria-hidden="true">
         <video class="hero-slide is-active" autoplay muted loop playsinline preload="metadata" data-hero-video>
           <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-35510475.mp4" type="video/mp4">
         </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-37784347.mp4" type="video/mp4">
-        </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-8964522.mp4" type="video/mp4">
-        </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-8523306.mp4" type="video/mp4">
-        </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-34556295.mp4" type="video/mp4">
-        </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-4109542.mp4" type="video/mp4">
-        </video>
-        <video class="hero-slide" autoplay muted loop playsinline preload="none" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-6529453.mp4" type="video/mp4">
-        </video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-37784347.mp4"></video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-8964522.mp4"></video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-8523306.mp4"></video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-34556295.mp4"></video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-4109542.mp4"></video>
+        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
+               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-6529453.mp4"></video>
       </div>
       <div class="hero-overlay"></div>
       <div class="container hero-content">
         <img
           class="hero-logo"
-          src="logo-c.svg?v=1.13"
+          src="logo-c.svg?v=1.14"
           alt="Corner cafe"
           width="256"
           height="256"
@@ -134,36 +140,41 @@
         <figure class="about-visual about-visual--section">
           <div class="glide glide--ltr glide--slider glide--swipeable" data-about-glide tabindex="0" aria-label="About gallery slider">
             <div class="glide__track" data-glide-el="track">
+              <!--
+                Slides sit in one wide row, so the browser's own lazy-loading treats them all
+                as near-viewport and fetched every photo up front. Only the first three carry
+                a src; script.js attaches the rest as they come round.
+              -->
               <ul class="glide__slides">
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/31450806/pexels-photo-31450806.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 31450806" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/29338219/pexels-photo-29338219.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 29338219" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/5836427/pexels-photo-5836427.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 5836427" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/60564/pexels-photo-60564.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 60564" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/7491941/pexels-photo-7491941.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 7491941" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/18354023/pexels-photo-18354023.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 18354023" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/139746/pexels-photo-139746.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 139746" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/11161469/pexels-photo-11161469.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 11161469" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/5589035/pexels-photo-5589035.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 5589035" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/18416961/pexels-photo-18416961.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 18416961" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/5639413/pexels-photo-5639413.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 5639413" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/18580150/pexels-photo-18580150.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 18580150" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/5836444/pexels-photo-5836444.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 5836444" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/29189659/pexels-photo-29189659.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 29189659" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/12548553/pexels-photo-12548553.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 12548553" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/17628584/pexels-photo-17628584.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 17628584" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/3026810/pexels-photo-3026810.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 3026810" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/38431295/pexels-photo-38431295.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 38431295" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/5638547/pexels-photo-5638547.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 5638547" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/12916029/pexels-photo-12916029.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 12916029" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/1707920/pexels-photo-1707920.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 1707920" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/6763217/pexels-photo-6763217.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 6763217" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/4869287/pexels-photo-4869287.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 4869287" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/13838605/pexels-photo-13838605.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 13838605" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/37029786/pexels-photo-37029786.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 37029786" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/34802738/pexels-photo-34802738.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 34802738" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/29614926/pexels-photo-29614926.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 29614926" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/30346820/pexels-photo-30346820.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 30346820" width="1920" height="1280" loading="lazy" decoding="async"></li>
-                <li class="glide__slide"><img src="https://images.pexels.com/photos/6463663/pexels-photo-6463663.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Cafe food photo from Pexels, image 6463663" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img src="https://images.pexels.com/photos/31450806/pexels-photo-31450806.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 31450806" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img src="https://images.pexels.com/photos/29338219/pexels-photo-29338219.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 29338219" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img src="https://images.pexels.com/photos/5836427/pexels-photo-5836427.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 5836427" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/60564/pexels-photo-60564.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 60564" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/7491941/pexels-photo-7491941.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 7491941" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/18354023/pexels-photo-18354023.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 18354023" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/139746/pexels-photo-139746.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 139746" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/11161469/pexels-photo-11161469.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 11161469" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/5589035/pexels-photo-5589035.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 5589035" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/18416961/pexels-photo-18416961.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 18416961" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/5639413/pexels-photo-5639413.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 5639413" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/18580150/pexels-photo-18580150.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 18580150" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/5836444/pexels-photo-5836444.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 5836444" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/29189659/pexels-photo-29189659.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 29189659" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/12548553/pexels-photo-12548553.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 12548553" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/17628584/pexels-photo-17628584.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 17628584" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/3026810/pexels-photo-3026810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 3026810" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/38431295/pexels-photo-38431295.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 38431295" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/5638547/pexels-photo-5638547.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 5638547" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/12916029/pexels-photo-12916029.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 12916029" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/1707920/pexels-photo-1707920.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 1707920" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/6763217/pexels-photo-6763217.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 6763217" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/4869287/pexels-photo-4869287.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 4869287" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/13838605/pexels-photo-13838605.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 13838605" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/37029786/pexels-photo-37029786.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 37029786" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/34802738/pexels-photo-34802738.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 34802738" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/29614926/pexels-photo-29614926.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 29614926" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/30346820/pexels-photo-30346820.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 30346820" width="1920" height="1280" loading="lazy" decoding="async"></li>
+                <li class="glide__slide"><img data-src="https://images.pexels.com/photos/6463663/pexels-photo-6463663.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Cafe food photo from Pexels, image 6463663" width="1920" height="1280" loading="lazy" decoding="async"></li>
               </ul>
             </div>
           </div>
@@ -192,57 +203,48 @@
           <div class="gallery-spotlight__stage">
             <div class="gallery-spotlight__track" tabindex="0" data-spotlight-viewport role="list">
               <figure class="gallery-spotlight__slide is-active" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="metadata" aria-label="Spotlight video 3680687">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/3680687.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="metadata" aria-label="Spotlight video 3680687"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/3680687.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 7143980">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7143980.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 7143980"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7143980.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 6288304">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/6288304.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 6288304"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/6288304.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 4519062">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/4519062.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 4519062"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/4519062.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 26593715">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/26593715.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 26593715"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/26593715.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 7015435">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7015435.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 7015435"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7015435.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 12769418">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/12769418.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 12769418"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/12769418.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 7236865">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7236865.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 7236865"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/7236865.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
               <figure class="gallery-spotlight__slide" role="listitem" data-spotlight-slide>
-                <video muted playsinline loop preload="none" aria-label="Spotlight video 10010861">
-                  <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/10010861.mp4" type="video/mp4">
-                </video>
+                <video muted playsinline loop preload="none" aria-label="Spotlight video 10010861"
+                       data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/spotlight/videos/10010861.mp4"></video>
                 <figcaption class="gallery-spotlight__caption"></figcaption>
               </figure>
             </div>
@@ -422,7 +424,6 @@
           <strong>Allergens:</strong> dishes may contain or come into contact with the 14 major UK allergens—please tell us before ordering.
           <span class="menu-legal-notes__sep" aria-hidden="true">·</span>
           <strong>Prices:</strong> menu prices include VAT where applicable.
-          <a href="#policies">Full policies</a>
         </p>
 
       </div>
@@ -464,7 +465,6 @@
           <p class="hours-service-note">
             <strong>Pickup</strong> at the counter · <strong>Delivery</strong> when Just Eat launches.
             Online order cut-off <strong>30 minutes before close</strong> (16:30).
-            <a href="#policies-fulfilment">Details</a>
           </p>
         </article>
         <article id="booking" class="booking-hours__col booking-hours__booking" aria-label="Booking">
@@ -508,7 +508,12 @@
       </div>
     </section>
 
-    <section id="policies" class="section policies-section" aria-labelledby="policies-title">
+    <!--
+      Policies / Legal & operations is withheld from the published site while the wording is in
+      draft. To restore: delete the hidden attribute below and re-add the nav, footer and
+      "Full policies" links that pointed at #policies.
+    -->
+    <section id="policies" class="section policies-section" aria-labelledby="policies-title" hidden>
       <div class="container policies-wrap">
         <p class="eyebrow">Legal &amp; operations</p>
         <h2 id="policies-title" class="policies-title">Policies</h2>
@@ -685,15 +690,9 @@
     <div class="container footer-wrap">
       <div>
         <p class="footer-copy">&copy; <span id="year"></span> The Corner Cafe</p>
-        <p class="footer-fine">
-          <a href="#policies">Policies</a>
-          · <a href="#policies-allergens">Allergens</a>
-          · <a href="#policies-privacy">Privacy</a>
-          · <a href="#policies-refunds">Refunds</a>
-        </p>
       </div>
     </div>
   </footer>
-  <script src="script.js?v=1.13" defer></script>
+  <script src="script.js?v=1.14" defer></script>
 </body>
 </html>

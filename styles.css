@@ -3243,4 +3243,255 @@ html[data-theme="light"] .contact-form__field textarea {
   }
 }
 
+/* ==========================================================================
+   Responsive + delivery layer (v1.14)
+   Kept last so it settles conflicts with the older ad-hoc breakpoints above.
+   Ranges: phone < 768px · tablet 768–1023px · laptop 1024–1439px · desktop 1440px+
+   ========================================================================== */
+
+[hidden] {
+  display: none !important;
+}
+
+/* Nothing may push the page sideways; clip keeps the sticky header working. */
+html,
+body {
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+}
+
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+img,
+video,
+iframe {
+  max-width: 100%;
+}
+
+/* Heavy offscreen sections skip layout and paint until the reader reaches them. */
+.booking-hours {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
+}
+
+/* Seven hero layers held a compositor buffer each; only the visible one needs one. */
+.hero-slide {
+  will-change: auto;
+}
+
+.hero-slide.is-active {
+  will-change: opacity;
+}
+
+.section {
+  padding-block: clamp(2.25rem, 6vw, 5.2rem);
+}
+
+/* The map iframe carried a fixed 550px width that overflowed narrow screens. */
+.map-embed {
+  width: min(550px, 100%);
+}
+
+.map-embed iframe {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 550 / 307;
+}
+
+/* Menu panels hold three columns; the base four-track grid left an empty column. */
+.menu-columns {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 768px) {
+  .menu-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .menu-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* The header holds `<nav class="nav nav-desktop">`, and the later `.nav { display: flex }`
+   rule outranked the display:none in the 900px breakpoint, so on phones the desktop links
+   rendered alongside the hamburger and pushed the theme and menu buttons off screen. */
+@media (max-width: 900px) {
+  .nav.nav-desktop {
+    display: none;
+  }
+
+  /* These intro titles are a nowrap typewriter reveal built for the wide two-column
+     layout. On a narrow screen the line is wider than the box, so the closing words were
+     never shown, and animating max-width over wrapped text reflows on every frame.
+     Stacked layouts get the full heading, statically. */
+  .hotel-intro__title,
+  .menu-intro__title {
+    white-space: normal;
+    display: block;
+    max-width: none;
+    overflow: visible;
+    transform: none;
+    border-right: none;
+    animation: none;
+  }
+
+  /* Match the lead text to the container gutters instead of the full-bleed desktop width. */
+  .hotel-intro__content,
+  .menu-intro__content {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* ---- Phone ---- */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 72vh;
+  }
+
+  .hero-content {
+    padding-block: clamp(2.5rem, 12vw, 5rem);
+  }
+
+  /* Blur behind the sticky header repaints on every scroll frame on low-end phones. */
+  .site-header {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--bg);
+  }
+
+  .booking-hours__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-wrap {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@supports (height: 100svh) {
+  @media (max-width: 767px) {
+    .hero {
+      min-height: 72svh;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .tab-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---- Tablet ---- */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .booking-hours__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Spotlight: two-pane only where there is genuinely room ----
+   That grid asks for 260px + 980px + gap and the menu inside it carries a 920px
+   min-width, so below ~1280px the menu had to be scrolled sideways to be read. */
+@media (max-width: 1279px) {
+  #spotlight > .container {
+    width: min(1120px, 92%);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #spotlight .section-stack {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #spotlight .section-stack > .spotlight-menu-tabs,
+  #spotlight .section-stack > .spotlight-menu-tabs .tab-panel {
+    max-height: none;
+    overflow: visible;
+  }
+
+  #spotlight .spotlight-menu-tabs .menu-columns {
+    min-width: 0;
+  }
+
+  .gallery-spotlight__shell,
+  .gallery-spotlight__stage {
+    height: auto;
+  }
+
+  .gallery-spotlight__track {
+    width: 100%;
+    height: min(58vh, 520px);
+  }
+}
+
+/* ---- Laptop ---- */
+@media (min-width: 1024px) {
+  .booking-hours__layout {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+}
+
+/* ---- Desktop ---- */
+@media (min-width: 1440px) {
+  .container {
+    width: min(1280px, 92%);
+  }
+}
+
+/* Comfortable hit areas wherever the pointer is a finger. */
+@media (pointer: coarse) {
+  .nav-desktop a,
+  .nav-mobile a,
+  .tab-btn,
+  .contact-social a,
+  .site-footer a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .gallery-spotlight__arrow {
+    min-width: 44px;
+    min-height: 44px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 

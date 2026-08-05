@@ -166,6 +166,70 @@
     }
   }
 
+  /* Metered or slow connections keep the opening clip and skip the video rotation entirely. */
+  const connection =
+    navigator.connection || navigator.mozConnection || navigator.webkitConnection || null;
+  const lightMediaMode = !!(
+    connection &&
+    (connection.saveData || /^(slow-2g|2g|3g)$/.test(connection.effectiveType || ""))
+  );
+
+  /**
+   * Give a lazily declared video its real source the first time that clip is needed.
+   * Returns true when it attached (and therefore already started loading).
+   */
+  const attachVideoSource = (vid) => {
+    if (!vid || vid.tagName !== "VIDEO" || vid.dataset.srcAttached === "1") return false;
+    const url = vid.dataset.src;
+    if (!url) return false;
+    const source = document.createElement("source");
+    source.src = url;
+    source.type = "video/mp4";
+    vid.appendChild(source);
+    vid.dataset.srcAttached = "1";
+    vid.load();
+    return true;
+  };
+
+  const whenIdle = (fn) =>
+    "requestIdleCallback" in window
+      ? window.requestIdleCallback(fn, { timeout: 2000 })
+      : window.setTimeout(fn, 600);
+
+  /**
+   * Run `fn` once `el` comes within about a screen of the viewport. IntersectionObserver does
+   * the work where it reports normally, but a scroll/resize position check runs alongside it
+   * so deferred media still appears in embedded or non-compositing views where it does not.
+   */
+  const whenNear = (el, fn) => {
+    if (!el) return;
+    let fired = false;
+    const check = () => {
+      if (fired) return;
+      const rect = el.getBoundingClientRect();
+      const margin = window.innerHeight + 200;
+      if (rect.top > window.innerHeight + margin || rect.bottom < -margin) return;
+      fired = true;
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+      fn();
+    };
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", check, { passive: true });
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries, observer) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+          check();
+        },
+        { rootMargin: "200px 0px" }
+      );
+      io.observe(el);
+    }
+    check();
+  };
+
   const heroRoot = document.querySelector("[data-hero-slideshow]");
   const heroSlides = heroRoot ? Array.from(heroRoot.querySelectorAll(".hero-slide")) : [];
   if (heroRoot && heroSlides.length > 0) {
@@ -184,6 +248,7 @@
         vid.defaultPlaybackRate = 1;
         vid.playbackRate = 1;
         if (active) {
+          const justAttached = attachVideoSource(vid);
           const playActive = () => {
             const p = vid.play();
             if (p && typeof p.catch === "function") p.catch(() => {});
@@ -204,7 +269,7 @@
               },
               { once: true }
             );
-            vid.load();
+            if (!justAttached) vid.load();
           }
         } else {
           vid.pause();
@@ -214,11 +279,13 @@
 
     syncHeroMedia();
 
-    if (!reduceMotion && heroSlides.length > 1) {
+    if (!reduceMotion && !lightMediaMode && heroSlides.length > 1) {
       const ms = 8000;
       const tick = () => {
         cur = (cur + 1) % heroSlides.length;
         syncHeroMedia();
+        // Warm the following clip during playback so the crossfade never waits on the network.
+        whenIdle(() => attachVideoSource(heroSlides[(cur + 1) % heroSlides.length]));
       };
       const timer = window.setInterval(tick, ms);
       window.addEventListener(
@@ -228,6 +295,7 @@
         },
         { once: true }
       );
+      whenIdle(() => attachVideoSource(heroSlides[1]));
     }
   }
 
@@ -257,6 +325,7 @@
           vid.muted = true;
           vid.playsInline = true;
           if (isActive) {
+            const justAttached = attachVideoSource(vid);
             const play = () => {
               const p = vid.play();
               if (p && typeof p.catch === "function") p.catch(() => {});
@@ -265,7 +334,7 @@
               play();
             } else {
               vid.addEventListener("loadedmetadata", play, { once: true });
-              vid.load();
+              if (!justAttached) vid.load();
             }
           } else {
             vid.pause();
@@ -333,8 +402,10 @@
         }
       });
 
+      let spotlightStarted = false;
+
       document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) scheduleAutoplay();
+        if (!document.hidden && spotlightStarted) scheduleAutoplay();
       });
 
       let resizeTimer = 0;
@@ -354,8 +425,15 @@
         { once: true }
       );
 
-      sync();
-      scheduleAutoplay();
+      /* Spotlight clips stay unfetched until the carousel is close to the viewport. */
+      const startSpotlight = () => {
+        if (spotlightStarted) return;
+        spotlightStarted = true;
+        sync();
+        if (!lightMediaMode) scheduleAutoplay();
+      };
+
+      whenNear(spotlightRoot, startSpotlight);
     }
   }
 
@@ -402,10 +480,13 @@
       const lightboxTitle = lightbox.querySelector(".about-lightbox__title");
       const lightboxDesc = lightbox.querySelector(".about-lightbox__desc");
 
+      /* Thumbnails are served at w=800; only the opened image asks for a larger render. */
+      const fullSizeSrc = (src) => String(src || "").replace(/([?&]w=)\d+/, "$11600");
+
       const openLightbox = (slide) => {
         const img = slide.querySelector("img");
         if (!img || !lightboxImg || !lightboxTitle || !lightboxDesc) return;
-        lightboxImg.src = img.currentSrc || img.src;
+        lightboxImg.src = fullSizeSrc(img.currentSrc || img.src);
         lightboxImg.alt = img.alt || "";
         lightboxTitle.textContent = slide.dataset.aboutTitle || "";
         lightboxDesc.textContent = slide.dataset.aboutDesc || "";
@@ -470,9 +551,23 @@
         const g = gap();
         return v <= 1 ? aboutGlide.clientWidth : (aboutGlide.clientWidth - g * (v - 1)) / v + g;
       };
+      /* Photos are attached for the slides on screen plus a few ahead of the loop. */
+      let galleryActive = false;
+      const loadSlideWindow = () => {
+        if (!galleryActive) return;
+        const last = current + visible() + 3;
+        for (let i = current; i <= last; i += 1) {
+          const img = aboutSlides[i % aboutSlides.length].querySelector("img[data-src]");
+          if (!img) continue;
+          img.src = img.dataset.src;
+          img.removeAttribute("data-src");
+        }
+      };
+
       const syncAbout = (animate = true) => {
         const clamped = Math.max(0, Math.min(maxIndex(), current));
         if (clamped !== current) current = clamped;
+        loadSlideWindow();
         aboutSlidesEl.style.transition = animate
           ? "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)"
           : "none";
@@ -550,8 +645,20 @@
       });
 
       syncAbout(false);
-      window.addEventListener("resize", () => syncAbout(false));
-      startAboutLoop();
+      let aboutResizeTimer = 0;
+      window.addEventListener("resize", () => {
+        window.clearTimeout(aboutResizeTimer);
+        aboutResizeTimer = window.setTimeout(() => syncAbout(false), 120);
+      });
+
+      /* The gallery only starts cycling once it is on screen, so it never pulls images early. */
+      const startGallery = () => {
+        galleryActive = true;
+        loadSlideWindow();
+        startAboutLoop();
+      };
+
+      whenNear(aboutGlide, startGallery);
       window.addEventListener(
         "pagehide",
         () => {

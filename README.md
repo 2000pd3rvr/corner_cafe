@@ -2,17 +2,34 @@
 title: Corner cafe
 sdk: static
 app_file: index.html
-sdk_version: "1.13"
+sdk_version: "1.14"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: true
-short_description: Send message only after Contact us · v1.13
+short_description: Responsive, fast-loading Scottish cafe site (v1.14)
 ---
 
 # Corner cafe
 
-**v1.13** — “Send a message” stays fully hidden until **Contact us** is clicked, then fields activate for typing. Fix: CSS `display:flex` no longer overrides `[hidden]`. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+**v1.14** — Responsive pass across phone, tablet, laptop and desktop, plus a much lighter first load. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+
+### Responsive
+
+- Breakpoint ranges tidied to phone (<768px), tablet (768–1023px), laptop (1024–1439px) and desktop (1440px+).
+- Menu grid now resolves 1 / 2 / 3 columns; the old four-track grid left an empty column on wide screens.
+- Fixed the 550px map iframe and the full-bleed contact band that could push the page sideways.
+- 44px minimum hit areas on touch pointers, safe-area padding for notched phones, and `svh` hero heights so mobile browser chrome does not cause a jump.
+
+### Loading
+
+- Hero ships **one** video instead of seven: the rest attach their source only when they are about to play.
+- Spotlight and gallery carousels stay unfetched until scrolled near the viewport.
+- Gallery photography requested at `w=800` rather than `w=1920`; the lightbox alone asks for the large render.
+- Google Fonts load without blocking first paint; `apple-touch-icon` is a 21KB 180×180 file instead of a 946KB image.
+- `Save-Data` and 2G/3G connections keep the opening frame and skip the video rotation entirely.
+
+> **Policies / Legal & operations is hidden** while the wording is in draft — see the comment above `#policies` in `index.html` to restore it.
 
 ## Mail
 
