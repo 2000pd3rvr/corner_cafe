@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta id="meta-theme-color" name="theme-color" content="#070707">
   <!-- Media via HF dataset PIANDT/sushi_atelier_artifacts (legacy folder name; cafe photography). -->
-  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.14">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1.14">
+  <link rel="icon" type="image/svg+xml" href="logo-c.svg?v=1.15">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=1.15">
   <script>
     (function () {
       try {
@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://images.pexels.com" crossorigin>
   <link rel="dns-prefetch" href="https://huggingface.co">
-  <link rel="stylesheet" href="styles.css?v=1.14">
+  <link rel="stylesheet" href="styles.css?v=1.15">
   <!-- Fonts load without blocking first paint; system stack renders immediately. -->
   <link
     rel="stylesheet"
@@ -79,15 +79,14 @@
   <main id="home">
     <section class="hero">
       <!--
-        Only the first clip ships a real src. The rest carry data-src and are attached by
-        script.js when they are about to play, so a phone downloads one video instead of seven.
+        Only the active clip ships a real src. The rest carry data-src and are attached by
+        script.js when they are about to play, so a phone downloads one video instead of six.
+        (Former first clip pexels-video-35510475 removed in v1.15.)
       -->
       <div class="hero-media" data-hero-slideshow aria-hidden="true">
         <video class="hero-slide is-active" autoplay muted loop playsinline preload="metadata" data-hero-video>
-          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-35510475.mp4" type="video/mp4">
+          <source src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-37784347.mp4" type="video/mp4">
         </video>
-        <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
-               data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-37784347.mp4"></video>
         <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
                data-src="https://huggingface.co/datasets/PIANDT/sushi_atelier_artifacts/resolve/main/videos/hero/pexels-video-8964522.mp4"></video>
         <video class="hero-slide" muted loop playsinline preload="none" data-hero-video
@@ -103,7 +102,7 @@
       <div class="container hero-content">
         <img
           class="hero-logo"
-          src="logo-c.svg?v=1.14"
+          src="logo-c.svg?v=1.15">
           alt="Corner cafe"
           width="256"
           height="256"
@@ -693,6 +692,6 @@
       </div>
     </div>
   </footer>
-  <script src="script.js?v=1.14" defer></script>
+  <script src="script.js?v=1.15" defer></script>
 </body>
 </html>

@@ -2,17 +2,22 @@
 title: Corner cafe
 sdk: static
 app_file: index.html
-sdk_version: "1.14"
+sdk_version: "1.15"
 emoji: ☕
 colorFrom: yellow
 colorTo: gray
 pinned: true
-short_description: Responsive, fast-loading Scottish cafe site (v1.14)
+short_description: Faster menu gallery on mobile/tablet (v1.15)
 ---
 
 # Corner cafe
 
-**v1.14** — Responsive pass across phone, tablet, laptop and desktop, plus a much lighter first load. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+**v1.15** — First home-background clip removed; menu-side spotlight gallery loads faster on phones and tablets. Open Monday–Sunday 9:00–17:00 at **9 Eskdail Court**, Dalkeith.
+
+### v1.15 notes
+
+- Hero slideshow no longer starts on `pexels-video-35510475` (that clip is gone); the former second clip is now the opening frame.
+- Menu-side gallery (spotlight): on viewports ≤1023px only **three** clips rotate, unused videos stay unloaded, autoplay dwell is longer, and fetch starts closer to the fold so the first frame arrives sooner on mobile and tablet radios.
 
 ### Responsive
 
@@ -23,7 +28,7 @@ short_description: Responsive, fast-loading Scottish cafe site (v1.14)
 
 ### Loading
 
-- Hero ships **one** video instead of seven: the rest attach their source only when they are about to play.
+- Hero ships **one** video instead of six: the rest attach their source only when they are about to play.
 - Spotlight and gallery carousels stay unfetched until scrolled near the viewport.
 - Gallery photography requested at `w=800` rather than `w=1920`; the lightbox alone asks for the large render.
 - Google Fonts load without blocking first paint; `apple-touch-icon` is a 21KB 180×180 file instead of a 946KB image.

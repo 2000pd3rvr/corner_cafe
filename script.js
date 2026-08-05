@@ -302,22 +302,61 @@
   const spotlightRoot = document.querySelector("[data-spotlight-carousel]");
   if (spotlightRoot) {
     const track = spotlightRoot.querySelector("[data-spotlight-viewport]");
-    const slides = Array.from(spotlightRoot.querySelectorAll("[data-spotlight-slide]"));
+    const allSlides = Array.from(spotlightRoot.querySelectorAll("[data-spotlight-slide]"));
     const prevBtn = spotlightRoot.querySelector("[data-spotlight-prev]");
     const nextBtn = spotlightRoot.querySelector("[data-spotlight-next]");
-    const n = slides.length;
 
-    /** Spotlight slideshow cadence. */
-    const AUTOPLAY_MS = 5200;
+    /**
+     * Menu-side gallery: phones and tablets only rotate a short clip set and never
+     * prefetch the next MP4, so the first frame arrives sooner on slower radios.
+     */
+    const compactMq = window.matchMedia("(max-width: 1023px)");
+    const isCompactSpotlight = () => compactMq.matches || lightMediaMode;
+    const activeSlides = () => {
+      if (!isCompactSpotlight()) return allSlides;
+      return allSlides.slice(0, Math.min(3, allSlides.length));
+    };
 
-    if (track && n > 0) {
+    if (track && allSlides.length > 0) {
       let current = 0;
       let autoplayTimer = 0;
       let exitCleanupTimer = 0;
+      let spotlightStarted = false;
+
+      const applyCompactVisibility = () => {
+        const keep = isCompactSpotlight() ? 3 : allSlides.length;
+        allSlides.forEach((sl, j) => {
+          const on = j < keep;
+          sl.hidden = !on;
+          if (!on) {
+            sl.classList.remove("is-active", "is-exiting");
+            const vid = sl.querySelector("video");
+            if (vid) {
+              vid.pause();
+              /* Drop unused sources so they cannot keep buffering in the background. */
+              if (vid.dataset.srcAttached === "1" && j >= keep) {
+                vid.removeAttribute("src");
+                vid.querySelectorAll("source").forEach((s) => s.remove());
+                vid.removeAttribute("data-src-attached");
+                vid.dataset.srcAttached = "0";
+                try {
+                  vid.load();
+                } catch (_) {}
+              }
+            }
+          }
+        });
+        if (current >= keep) current = 0;
+      };
 
       const sync = () => {
-        slides.forEach((sl, j) => {
-          const isActive = j === current;
+        const slides = activeSlides();
+        const n = slides.length;
+        if (current >= n) current = 0;
+        allSlides.forEach((sl) => {
+          if (sl.hidden) return;
+          const idx = slides.indexOf(sl);
+          const isActive = idx === current;
           sl.classList.toggle("is-active", isActive);
           if (isActive) sl.classList.remove("is-exiting");
           const vid = sl.querySelector("video");
@@ -346,6 +385,9 @@
       };
 
       const goTo = (index) => {
+        const slides = activeSlides();
+        const n = slides.length;
+        if (n <= 0) return;
         const prev = current;
         current = ((index % n) + n) % n;
         if (prev !== current) {
@@ -355,7 +397,7 @@
             window.clearTimeout(exitCleanupTimer);
             exitCleanupTimer = window.setTimeout(() => {
               prevSlide.classList.remove("is-exiting");
-            }, 1900);
+            }, isCompactSpotlight() ? 700 : 1900);
           }
         }
         sync();
@@ -367,23 +409,29 @@
 
       const scheduleAutoplay = () => {
         window.clearTimeout(autoplayTimer);
-        if (n <= 1) return;
+        const slides = activeSlides();
+        if (slides.length <= 1) return;
+        if (lightMediaMode) return;
+        /* Longer dwell on phones/tablets = fewer sequential downloads. */
+        const cadence = isCompactSpotlight() ? 9000 : 5200;
         const tick = () => {
           if (document.hidden) {
-            autoplayTimer = window.setTimeout(tick, AUTOPLAY_MS);
+            autoplayTimer = window.setTimeout(tick, cadence);
             return;
           }
           goDelta(1);
-          autoplayTimer = window.setTimeout(tick, AUTOPLAY_MS);
+          autoplayTimer = window.setTimeout(tick, cadence);
         };
-        autoplayTimer = window.setTimeout(tick, AUTOPLAY_MS);
+        autoplayTimer = window.setTimeout(tick, cadence);
       };
 
       prevBtn?.addEventListener("click", () => {
         goDelta(-1);
+        if (spotlightStarted) scheduleAutoplay();
       });
       nextBtn?.addEventListener("click", () => {
         goDelta(1);
+        if (spotlightStarted) scheduleAutoplay();
       });
 
       track.addEventListener("keydown", (e) => {
@@ -398,11 +446,9 @@
           goTo(0);
         } else if (e.key === "End") {
           e.preventDefault();
-          goTo(n - 1);
+          goTo(activeSlides().length - 1);
         }
       });
-
-      let spotlightStarted = false;
 
       document.addEventListener("visibilitychange", () => {
         if (!document.hidden && spotlightStarted) scheduleAutoplay();
@@ -412,7 +458,9 @@
       window.addEventListener("resize", () => {
         window.clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(() => {
+          applyCompactVisibility();
           sync();
+          if (spotlightStarted) scheduleAutoplay();
         }, 120);
       });
 
@@ -425,15 +473,47 @@
         { once: true }
       );
 
-      /* Spotlight clips stay unfetched until the carousel is close to the viewport. */
       const startSpotlight = () => {
         if (spotlightStarted) return;
         spotlightStarted = true;
+        applyCompactVisibility();
         sync();
-        if (!lightMediaMode) scheduleAutoplay();
+        scheduleAutoplay();
       };
 
-      whenNear(spotlightRoot, startSpotlight);
+      /* Start closer to the fold on phones so we do not kick off an MP4 while still above. */
+      const nearEl = spotlightRoot;
+      const whenNearSpotlight = (fn) => {
+        if (!nearEl) return;
+        let fired = false;
+        const marginPx = isCompactSpotlight() ? 80 : 200;
+        const check = () => {
+          if (fired) return;
+          const rect = nearEl.getBoundingClientRect();
+          if (rect.top > window.innerHeight + marginPx || rect.bottom < -marginPx) return;
+          fired = true;
+          window.removeEventListener("scroll", check);
+          window.removeEventListener("resize", check);
+          fn();
+        };
+        window.addEventListener("scroll", check, { passive: true });
+        window.addEventListener("resize", check, { passive: true });
+        if ("IntersectionObserver" in window) {
+          const io = new IntersectionObserver(
+            (entries, observer) => {
+              if (!entries.some((entry) => entry.isIntersecting)) return;
+              observer.disconnect();
+              check();
+            },
+            { rootMargin: `${marginPx}px 0px` }
+          );
+          io.observe(nearEl);
+        }
+        check();
+      };
+
+      applyCompactVisibility();
+      whenNearSpotlight(startSpotlight);
     }
   }
 
