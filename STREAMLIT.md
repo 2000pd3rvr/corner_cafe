@@ -1,18 +1,8 @@
-# Corner Cafe — Streamlit Community Cloud
+# Deploying Corner Cafe on Streamlit Community Cloud
 
-GitHub-connected Streamlit description app for crawlers and reviewers.
+1. Open [share.streamlit.io](https://share.streamlit.io/) and sign in with GitHub (`2000pd3rvr`).
+2. Create app → repository `2000pd3rvr/corner_cafe` → branch `main` → main file `streamlit_app.py`.
+3. Choose a subdomain such as `corner-cafe`, then deploy.
 
-- Entrypoint: `streamlit_app.py`
-- Live interactive demo: https://huggingface.co/spaces/0001AMA/corner_cafe
-- Repository: https://github.com/2000pd3rvr/corner_cafe
-- Author: Deborah Akuoko Minka / Deborah Akuoko-Minka
-
-## Deploy
-
-1. Open https://share.streamlit.io/
-2. Sign in with GitHub (`2000pd3rvr`)
-3. Create app → repository `2000pd3rvr/corner_cafe` → branch `main` → main file `streamlit_app.py`
-4. Deploy
-
-Note: Community Cloud free tier typically allows a small number of concurrent apps.
-The interactive runtime remains on Hugging Face; Streamlit hosts the crawlable project page.
+Live site: https://huggingface.co/spaces/0001AMA/corner_cafe  
+Source: https://github.com/2000pd3rvr/corner_cafe
