@@ -27,4 +27,4 @@ ABOUT = """
 - [Research site](https://deborahakuokominka.wordpress.com/) · [ORCID](https://orcid.org/0009-0008-6219-154X)
 """
 
-render_live_site(HTML, height=1200, about_title="About Corner Cafe", about_md=ABOUT)
+render_live_site(HTML, height=1200, about_title="About Corner Cafe", about_md=ABOUT, asset_cdn="https://cdn.jsdelivr.net/gh/2000pd3rvr/corner_cafe@main")
