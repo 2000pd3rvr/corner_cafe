@@ -4,3 +4,4 @@ httpx
 huggingface_hub>=0.20.0
 aiosmtplib>=3.0.0
 pydantic>=2.0.0
+streamlit>=1.28.0
